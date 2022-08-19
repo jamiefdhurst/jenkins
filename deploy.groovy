@@ -10,7 +10,7 @@ node {
     */
 
     stage('Get Available Versions') {
-        library identifier: 'infrastructure@main'
+        library identifier: 'jenkins@main'
 
         copyParamsToEnv()
         if (!env.targetVersion) {

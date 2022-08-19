@@ -4,7 +4,7 @@ import groovy.json.JsonOutput
 node {
     // Presumes env.repository is available
     stage('Get Latest Version') {
-        library identifier: 'infrastructure@main'
+        library identifier: 'jenkins@main'
 
         copyParamsToEnv()
         print 'Getting latest version for: ' + env.repository
