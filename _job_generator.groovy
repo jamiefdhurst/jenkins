@@ -51,13 +51,13 @@ pipelineJob('github/blog-folder/release') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/release-version.groovy')
+            scriptPath('release-version.groovy')
         }
     }
 }
@@ -79,13 +79,13 @@ pipelineJob('github/blog-folder/deploy') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/deploy.groovy')
+            scriptPath('deploy.groovy')
         }
     }
 }
@@ -136,13 +136,13 @@ pipelineJob('github/journal-folder/release') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/release-version.groovy')
+            scriptPath('release-version.groovy')
         }
     }
 }
@@ -164,13 +164,13 @@ pipelineJob('github/journal-folder/deploy') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/deploy.groovy')
+            scriptPath('deploy.groovy')
         }
     }
 }
@@ -222,13 +222,13 @@ pipelineJob('github/yendo-mysql-folder/release') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/release-version.groovy')
+            scriptPath('release-version.groovy')
         }
     }
 }
@@ -251,13 +251,13 @@ pipelineJob('utilities/backup-journal') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/backup-journal.groovy')
+            scriptPath('backup-journal.groovy')
         }
     }
 }
@@ -276,13 +276,13 @@ pipelineJob('utilities/docker-cleanup') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/docker-cleanup.groovy')
+            scriptPath('docker-cleanup.groovy')
         }
     }
 }
@@ -301,13 +301,13 @@ pipelineJob('utilities/update-infrastructure') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jamiefdhurst/infrastructure')
+                        url('https://github.com/jamiefdhurst/jenkins')
                         credentials('github-personal-access-token')
                     }
                     branch('main')
                 }
             }
-            scriptPath('jenkins/update-infrastructure.groovy')
+            scriptPath('update-infrastructure.groovy')
         }
     }
 }
