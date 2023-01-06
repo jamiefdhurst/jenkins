@@ -90,6 +90,93 @@ pipelineJob('github/blog-folder/deploy') {
     }
 }
 
+folder('github/goldeneye-folder') {
+    displayName('GoldenEye')
+}
+
+multibranchPipelineJob('github/goldeneye-folder/build') {
+    displayName 'GoldenEye - Build'
+    description 'Jamie\'s GoldenEye Source'
+    branchSources {
+        github {
+            id('79704f18-78ba-40de-a16c-61f5730bd86b')
+            scanCredentialsId('github-personal-access-token')
+            repoOwner('jamiefdhurst')
+            repository('goldeneye')
+            buildForkPRHead(false)
+            buildForkPRMerge(false)
+            buildOriginBranchWithPR(false)
+            buildOriginPRHead(false)
+            buildOriginPRMerge(true)
+            orphanedItemStrategy {
+                discardOldItems {
+                    daysToKeep(7)
+                }
+            }
+        }
+    }
+    triggers {
+        cron('@daily')
+    }
+}
+
+pipelineJob('github/goldeneye-folder/release') {
+    displayName 'GoldenEye - Release'
+    description 'Release new version of GoldenEye to GitHub'
+    environmentVariables {
+        env('repository', 'jamiefdhurst/goldeneye')
+        env('releaseBranch', 'main')
+        env('automaticRelease', true)
+        env('pushRelease', true)
+        env('dockerImage', 'goldeneye')
+    }
+    logRotator {
+        numToKeep(10)
+    }
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url('https://github.com/jamiefdhurst/jenkins')
+                        credentials('github-personal-access-token')
+                    }
+                    branch('main')
+                }
+            }
+            scriptPath('release-version.groovy')
+        }
+    }
+}
+
+// pipelineJob('github/goldeneye-folder/deploy') {
+//     displayName 'GoldenEye - Deploy'
+//     description 'Deploy GoldenEye'
+//     environmentVariables {
+//         env('repository', 'jamiefdhurst/goldeneye')
+//         env('target', 'journal-priv.jamiehurst.co.uk')
+//         env('targetImage', 'goldeneye')
+//         env('targetKey', 'hiawatha-ssh-key')
+//     }
+//     logRotator {
+//         numToKeep(10)
+//     }
+//     definition {
+//         cpsScm {
+//             scm {
+//                 git {
+//                     remote {
+//                         url('https://github.com/jamiefdhurst/jenkins')
+//                         credentials('github-personal-access-token')
+//                     }
+//                     branch('main')
+//                 }
+//             }
+//             scriptPath('deploy.groovy')
+//         }
+//     }
+// }
+
 folder('github/journal-folder') {
     displayName('Journal')
 }
