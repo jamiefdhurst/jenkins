@@ -96,7 +96,7 @@ folder('github/goldeneye-folder') {
 
 multibranchPipelineJob('github/goldeneye-folder/build') {
     displayName 'GoldenEye - Build'
-    description 'Jamie\'s GoldenEye Source'
+    description 'GoldenEye Source'
     branchSources {
         github {
             id('79704f18-78ba-40de-a16c-61f5730bd86b')
