@@ -47,6 +47,7 @@ node {
 
             for (versionFile in env.versionFiles.tokenize(',')) {
                 print 'Updating version in file: ' + versionFile
+                print 'Replacing ' + version.numbers + ' with ' + nextVersion.numbers
                 String file = readFile(file: versionFile)
                 print 'Before: ' + file
                 file = file.replaceAll(version.numbers, nextVersion.numbers)
