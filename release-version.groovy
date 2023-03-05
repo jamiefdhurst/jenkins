@@ -1,6 +1,7 @@
 /* groovylint-disable LineLength */
 import groovy.json.JsonOutput
 
+/* groovylint-disable-next-line CompileStatic */
 node {
     // Presumes env.repository is available
     stage('Get Latest Version') {
@@ -31,23 +32,46 @@ node {
 
         releaseText = "Release ${nextVersion.full}"
         if (releaseDetails.changeLog.size()) {
-            releaseText += ", including the following commits: \n- " + releaseDetails.changeLog.join("\n- ")
+            releaseText += ', including the following commits: \n- ' + releaseDetails.changeLog.join('\n- ')
         }
     }
-    stage('Checkout Code and Push Tag') {
+    stage('Checkout & Commit Changes') {
+        if (nextVersion.full != version.full && env.containsKey('versionFiles') && env.versionFiles && env.versionFiles.size() > 0) {
+            checkout([
+                $class: 'GitSCM',
+                branches: [[name: 'refs/heads/' + (env.releaseBranch ?: 'main')]],
+                userRemoteConfigs: [
+                    [credentialsId: 'github-personal-access-token', url: "https://github.com/${env.repository}.git"]
+                ]
+            ])
+
+            for (versionFile in versionFiles) {
+                print 'Updating version in file: ' + versionFile
+                String file = readFile(file: versionFile)
+                file.replace(version.full, nextVersion.full)
+                writeFile(file: versionFile, text: file)
+            }
+
+            sh 'git commit -am "Skip CI: updated version number'
+            withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                sh "git push https://${GIT_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git"
+            }
+        }
+    }
+    stage('Push Tag') {
         if (nextVersion.full != version.full) {
             print "Releasing ${nextVersion.full}..."
 
             releaseData = JsonOutput.toJson([
                 tag_name: nextVersion.full,
-                target_commitish: env.releaseBranch ?: 'master',
+                target_commitish: env.releaseBranch ?: 'main',
                 name: nextVersion.full,
                 body: releaseText,
                 draft: false,
                 prerelease: false
             ])
 
-            print "Changelog: \n" + releaseText
+            print 'Changelog: \n' + releaseText
 
             if (env.pushRelease) {
                 withCredentials([usernameColonPassword(credentialsId: 'github-personal-access-token', variable: 'GITHUB_API_TOKEN')]) {
@@ -62,7 +86,7 @@ node {
     }
     stage('Push Docker Image') {
         if (env.dockerImage) {
-            print "Pushing Docker image..."
+            print 'Pushing Docker image...'
             withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
                 sh "docker login -u $GITHUB_USERNAME -p $GITHUB_PASSWORD ghcr.io"
                 sh """
