@@ -48,7 +48,7 @@ node {
             for (versionFile in env.versionFiles.tokenize(',')) {
                 print 'Updating version in file: ' + versionFile
                 String file = readFile(file: versionFile)
-                file.replace(version.full, nextVersion.full)
+                file = file.replace(version.full, nextVersion.full)
                 writeFile(file: versionFile, text: file)
             }
 
