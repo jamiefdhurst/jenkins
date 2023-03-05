@@ -52,6 +52,8 @@ node {
                 writeFile(file: versionFile, text: file)
             }
 
+            sh 'git config --global user.name "Jenkins CI"'
+            sh 'git config --global user.email "jenkins-ci@jamiehurst.co.uk"'
             sh 'git commit -am "Skip CI: updated version number"'
             withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
                 sh "git push 'https://${GIT_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git'"
