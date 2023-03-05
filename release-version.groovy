@@ -45,6 +45,7 @@ node {
                     [credentialsId: 'github-personal-access-token', url: "https://github.com/${env.repository}.git"]
                 ]
             ])
+            sh 'git checkout ' + (env.releaseBranch ?: 'main')
 
             for (versionFile in env.versionFiles.tokenize(',')) {
                 print 'Updating version in file: ' + versionFile
@@ -57,7 +58,7 @@ node {
             sh 'git config --global user.email "jenkins-ci@jamiehurst.co.uk"'
             sh 'git commit -am "Skip CI: updated version number"'
             withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                sh "git push 'https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git'"
+                sh "git push 'https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git'" + (env.releaseBranch ?: 'main')
             }
         }
     }
