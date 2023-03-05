@@ -49,7 +49,7 @@ node {
                 print 'Updating version in file: ' + versionFile
                 String file = readFile(file: versionFile)
                 print 'Before: ' + file
-                file = file.replace(version.full, nextVersion.full)
+                file = file.replaceAll(version.full, nextVersion.full)
                 print 'After:' + file
                 writeFile(file: versionFile, text: file)
             }
