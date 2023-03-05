@@ -37,6 +37,7 @@ node {
     }
     stage('Checkout & Commit Changes') {
         if (nextVersion.full != version.full && env.versionFiles) {
+            print "Updating files to show ${nextVersion.full}..."
             checkout([
                 $class: 'GitSCM',
                 branches: [[name: 'refs/heads/' + (env.releaseBranch ?: 'main')]],
