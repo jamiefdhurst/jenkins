@@ -52,9 +52,9 @@ node {
                 writeFile(file: versionFile, text: file)
             }
 
-            sh 'git commit -am "Skip CI: updated version number'
+            sh 'git commit -am "Skip CI: updated version number"'
             withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                sh "git push https://${GIT_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git"
+                sh "git push 'https://${GIT_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git'"
             }
         }
     }
