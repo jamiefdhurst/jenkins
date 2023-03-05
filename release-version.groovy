@@ -37,7 +37,6 @@ node {
     }
     stage('Checkout & Commit Changes') {
         if (nextVersion.full != version.full && env.versionFiles) {
-            env.versionFiles = env.versionFiles.split(',')
             checkout([
                 $class: 'GitSCM',
                 branches: [[name: 'refs/heads/' + (env.releaseBranch ?: 'main')]],
@@ -46,7 +45,7 @@ node {
                 ]
             ])
 
-            for (versionFile in env.versionFiles) {
+            for (versionFile in env.versionFiles.tokenize(',')) {
                 print 'Updating version in file: ' + versionFile
                 String file = readFile(file: versionFile)
                 file.replace(version.full, nextVersion.full)
