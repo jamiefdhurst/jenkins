@@ -36,7 +36,7 @@ node {
         }
     }
     stage('Checkout & Commit Changes') {
-        if (nextVersion.full != version.full && env.containsKey('versionFiles') && env.versionFiles) {
+        if (nextVersion.full != version.full && env.versionFiles) {
             env.versionFiles = env.versionFiles.split(',')
             checkout([
                 $class: 'GitSCM',
