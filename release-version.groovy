@@ -73,7 +73,7 @@ pipeline {
                             sh 'git config --global user.name "Jenkins CI"'
                             sh 'git config --global user.email "jenkins-ci@jamiehurst.co.uk"'
                             sh 'git commit -m "Skip CI: updated version number"'
-                            sh 'git push'
+                            sh "git push 'https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git' " + (env.releaseBranch ?: 'main')
                         }
                     }
                 }
