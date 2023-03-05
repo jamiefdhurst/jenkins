@@ -212,7 +212,7 @@ pipelineJob('github/journal-folder/release') {
     description 'Release new version of Journal to GitHub'
     environmentVariables {
         env('repository', 'jamiefdhurst/journal')
-        env('versionFiles', ['journal.go', 'web/app/package.json'])
+        env('versionFiles', 'journal.go,web/app/package.json')
         env('automaticRelease', true)
         env('pushRelease', true)
     }
