@@ -48,11 +48,8 @@ node {
 
             for (versionFile in env.versionFiles.tokenize(',')) {
                 print 'Updating version in file: ' + versionFile
-                print 'Replacing ' + version.numbers + ' with ' + nextVersion.numbers
                 String file = readFile(file: versionFile)
-                print 'Before: ' + file
                 file = file.replaceAll(version.numbers, nextVersion.numbers)
-                print 'After:' + file
                 writeFile(file: versionFile, text: file)
             }
 
@@ -60,7 +57,7 @@ node {
             sh 'git config --global user.email "jenkins-ci@jamiehurst.co.uk"'
             sh 'git commit -am "Skip CI: updated version number"'
             withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                sh "git push 'https://${GIT_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git'"
+                sh "git push 'https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git'"
             }
         }
     }
