@@ -36,5 +36,5 @@ def call(Map vars=[:]) {
         revision = 0
     }
 
-    return [full: latestVersion, major: major, minor: minor, patch: patch, revision: revision]
+    return [full: latestVersion, numbers: latestVersion.tokenize('v')[0], major: major, minor: minor, patch: patch, revision: revision]
 }
