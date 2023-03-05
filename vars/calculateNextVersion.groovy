@@ -1,5 +1,5 @@
 def call(Map vars=[:]) {
-    version = vars.get('version', [full: '', major: 0, minor: 0, patch: 0, revision: 0])
+    version = vars.get('version', [full: '', numbers: '', major: 0, minor: 0, patch: 0, revision: 0])
     release = vars.get('release', '').toLowerCase()
 
     if (!release) {
@@ -36,5 +36,6 @@ def call(Map vars=[:]) {
         }
     }
     version.full = newVersion
+    version.numbers = version.full.tokenize('v')[0]
     return version
 }
