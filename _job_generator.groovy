@@ -215,6 +215,7 @@ pipelineJob('github/journal-folder/release') {
         env('versionFiles', 'journal.go,web/app/package.json')
         env('automaticRelease', true)
         env('pushRelease', true)
+        env('dockerImage', 'journal')
     }
     logRotator {
         numToKeep(10)
