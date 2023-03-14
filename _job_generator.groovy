@@ -216,6 +216,7 @@ pipelineJob('github/journal-folder/release') {
         env('automaticRelease', true)
         env('pushRelease', true)
         env('dockerImage', 'journal')
+        env('dockerRebuild', true)
     }
     logRotator {
         numToKeep(10)

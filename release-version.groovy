@@ -75,6 +75,10 @@ pipeline {
                             sh 'git commit -m "Skip CI: updated version number"'
                             sh "git push 'https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${env.repository}.git' " + (env.releaseBranch ?: 'main')
                         }
+
+                        if (env.dockerRebuild) {
+                            sh "docker build -t ${env.dockerImage} -f Dockerfile ."
+                        }
                     }
                 }
             }
