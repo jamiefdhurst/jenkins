@@ -198,6 +198,8 @@ multibranchPipelineJob('github/journal-folder/build') {
                     credentialsId('github-personal-access-token')
                     configuredByUrl(false)
                     repositoryUrl('https://github.com/jamiefdhurst/journal.git')
+                    repoOwner('jamiefdhurst')
+                    repository('journal')
                     buildForkPRHead(false)
                     buildForkPRMerge(false)
                     buildOriginBranchWithPR(false)
