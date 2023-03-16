@@ -185,6 +185,14 @@ multibranchPipelineJob('github/journal-folder/build') {
     displayName 'Journal - Build'
     description 'Journal OS project'
     branchSources {
+        branchSource {
+            buildStrategies {
+                ignoreCommiterStrategy {
+                    ignoredAuthors('jamie')
+                    allowBuildIfNotExcludedAuthor(true)
+                }
+            }
+        }
         github {
             id('40f73a63-7f0d-4c71-8ac2-0f0b2f65e446')
             scanCredentialsId('github-personal-access-token')
