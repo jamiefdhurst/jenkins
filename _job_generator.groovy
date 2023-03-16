@@ -200,11 +200,14 @@ multibranchPipelineJob('github/journal-folder/build') {
                     repositoryUrl('https://github.com/jamiefdhurst/journal.git')
                     repoOwner('jamiefdhurst')
                     repository('journal')
-                    buildForkPRHead(false)
-                    buildForkPRMerge(false)
-                    buildOriginBranchWithPR(false)
-                    buildOriginPRHead(false)
-                    buildOriginPRMerge(true)
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(1)
+                        }
+                    }
                 }
             }
         }
