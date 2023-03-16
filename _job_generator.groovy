@@ -187,7 +187,7 @@ multibranchPipelineJob('github/journal-folder/build') {
     branchSources {
         branchSource {
             buildStrategies {
-                ignoreCommiterStrategy {
+                ignoreCommitterStrategy {
                     ignoredAuthors('jamie')
                     allowBuildIfNotExcludedAuthor(true)
                 }
