@@ -192,22 +192,24 @@ multibranchPipelineJob('github/journal-folder/build') {
                     allowBuildIfNotExcludedAuthor(true)
                 }
             }
-        }
-        github {
-            id('40f73a63-7f0d-4c71-8ac2-0f0b2f65e446')
-            scanCredentialsId('github-personal-access-token')
-            repoOwner('jamiefdhurst')
-            repository('journal')
-            buildForkPRHead(false)
-            buildForkPRMerge(false)
-            buildOriginBranchWithPR(false)
-            buildOriginPRHead(false)
-            buildOriginPRMerge(true)
-            orphanedItemStrategy {
-                discardOldItems {
-                    daysToKeep(7)
+            source {
+                github {
+                    id('40f73a63-7f0d-4c71-8ac2-0f0b2f65e446')
+                    credentialsId('github-personal-access-token')
+                    repoOwner('jamiefdhurst')
+                    repository('journal')
+                    buildForkPRHead(false)
+                    buildForkPRMerge(false)
+                    buildOriginBranchWithPR(false)
+                    buildOriginPRHead(false)
+                    buildOriginPRMerge(true)
                 }
             }
+        }
+    }
+    orphanedItemStrategy {
+        discardOldItems {
+            daysToKeep(7)
         }
     }
     triggers {
