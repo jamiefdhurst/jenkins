@@ -11,21 +11,36 @@ multibranchPipelineJob('github/blog-folder/build') {
     displayName 'Blog - Build'
     description 'Jamie\'s Blog Source'
     branchSources {
-        github {
-            id('79704f18-78ba-40de-a16c-61f5730bd86b')
-            scanCredentialsId('github-personal-access-token')
-            repoOwner('jamiefdhurst')
-            repository('blog')
-            buildForkPRHead(false)
-            buildForkPRMerge(false)
-            buildOriginBranchWithPR(false)
-            buildOriginPRHead(false)
-            buildOriginPRMerge(true)
-            orphanedItemStrategy {
-                discardOldItems {
-                    daysToKeep(7)
+        branchSource {
+            buildStrategies {
+                ignoreCommitterStrategy {
+                    ignoredAuthors('jamie,jenkins-ci,jenkins-ci@jamiehurst.co.uk')
+                    allowBuildIfNotExcludedAuthor(true)
                 }
             }
+            source {
+                github {
+                    id('79704f18-78ba-40de-a16c-61f5730bd86b')
+                    credentialsId('github-personal-access-token')
+                    configuredByUrl(false)
+                    repositoryUrl('https://github.com/jamiefdhurst/blog.git')
+                    repoOwner('jamiefdhurst')
+                    repository('blog')
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    orphanedItemStrategy {
+        discardOldItems {
+            daysToKeep(7)
         }
     }
     triggers {
@@ -98,21 +113,36 @@ multibranchPipelineJob('github/goldeneye-folder/build') {
     displayName 'GoldenEye - Build'
     description 'GoldenEye Source'
     branchSources {
-        github {
-            id('79704f18-78ba-40de-a16c-61f5730bd86b')
-            scanCredentialsId('github-personal-access-token')
-            repoOwner('jamiefdhurst')
-            repository('goldeneye')
-            buildForkPRHead(false)
-            buildForkPRMerge(false)
-            buildOriginBranchWithPR(false)
-            buildOriginPRHead(false)
-            buildOriginPRMerge(true)
-            orphanedItemStrategy {
-                discardOldItems {
-                    daysToKeep(7)
+        branchSource {
+            buildStrategies {
+                ignoreCommitterStrategy {
+                    ignoredAuthors('jamie,jenkins-ci,jenkins-ci@jamiehurst.co.uk')
+                    allowBuildIfNotExcludedAuthor(true)
                 }
             }
+            source {
+                github {
+                    id('79704f18-78ba-40de-a16c-61f5730bd86c')
+                    credentialsId('github-personal-access-token')
+                    configuredByUrl(false)
+                    repositoryUrl('https://github.com/jamiefdhurst/goldeneye.git')
+                    repoOwner('jamiefdhurst')
+                    repository('goldeneye')
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    orphanedItemStrategy {
+        discardOldItems {
+            daysToKeep(7)
         }
     }
     triggers {
@@ -183,12 +213,12 @@ folder('github/journal-folder') {
 
 multibranchPipelineJob('github/journal-folder/build') {
     displayName 'Journal - Build'
-    description 'Journal OS project'
+    description 'Journal open-source project'
     branchSources {
         branchSource {
             buildStrategies {
                 ignoreCommitterStrategy {
-                    ignoredAuthors('jamie')
+                    ignoredAuthors('jamie,jenkins-ci,jenkins-ci@jamiehurst.co.uk')
                     allowBuildIfNotExcludedAuthor(true)
                 }
             }
@@ -286,23 +316,38 @@ folder('github/yendo-mysql-folder') {
 
 multibranchPipelineJob('github/yendo-mysql-folder/build') {
     displayName 'Yendo-mysql - Build'
-    description 'Yendo-mysql OS Golang project'
+    description 'Yendo-mysql open-source Golang project'
     branchSources {
-        github {
-            id('62f9e77a-0ee3-415f-8a87-4078b9eee805')
-            scanCredentialsId('github-personal-access-token')
-            repoOwner('jamiefdhurst')
-            repository('yendo-mysql')
-            buildForkPRHead(false)
-            buildForkPRMerge(false)
-            buildOriginBranchWithPR(false)
-            buildOriginPRHead(false)
-            buildOriginPRMerge(true)
-            orphanedItemStrategy {
-                discardOldItems {
-                    daysToKeep(7)
+        branchSource {
+            buildStrategies {
+                ignoreCommitterStrategy {
+                    ignoredAuthors('jamie,jenkins-ci,jenkins-ci@jamiehurst.co.uk')
+                    allowBuildIfNotExcludedAuthor(true)
                 }
             }
+            source {
+                github {
+                    id('62f9e77a-0ee3-415f-8a87-4078b9eee805')
+                    credentialsId('github-personal-access-token')
+                    configuredByUrl(false)
+                    repositoryUrl('https://github.com/jamiefdhurst/yendo-mysql.git')
+                    repoOwner('jamiefdhurst')
+                    repository('yendo-mysql')
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    orphanedItemStrategy {
+        discardOldItems {
+            daysToKeep(7)
         }
     }
     triggers {
