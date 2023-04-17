@@ -44,7 +44,9 @@ multibranchPipelineJob('github/blog-folder/build') {
         }
     }
     triggers {
-        cron('10 5 * * *')
+        periodicFolderTrigger {
+            interval('5m')
+        }
     }
 }
 
