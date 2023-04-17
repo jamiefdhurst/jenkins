@@ -148,7 +148,9 @@ multibranchPipelineJob('github/goldeneye-folder/build') {
         }
     }
     triggers {
-        cron('@daily')
+        periodicFolderTrigger {
+            interval('5m')
+        }
     }
 }
 
@@ -250,7 +252,9 @@ multibranchPipelineJob('github/journal-folder/build') {
         }
     }
     triggers {
-        cron('@daily')
+        periodicFolderTrigger {
+            interval('5m')
+        }
     }
 }
 
@@ -353,7 +357,9 @@ multibranchPipelineJob('github/yendo-mysql-folder/build') {
         }
     }
     triggers {
-        cron('@daily')
+        periodicFolderTrigger {
+            interval('5m')
+        }
     }
 }
 
@@ -396,7 +402,7 @@ pipelineJob('utilities/backup-journal') {
         numToKeep(10)
     }
     triggers {
-        cron('H 0 * * *')
+        cron('6 5 * * *')
     }
     definition {
         cpsScm {
@@ -421,7 +427,7 @@ pipelineJob('utilities/docker-cleanup') {
         numToKeep(10)
     }
     triggers {
-        cron('H 3 * * *')
+        cron('7 5 * * *')
     }
     definition {
         cpsScm {
@@ -446,7 +452,7 @@ pipelineJob('utilities/update-infrastructure') {
         numToKeep(10)
     }
     triggers {
-        cron('H 5 * * *')
+        cron('10 5 * * *')
     }
     definition {
         cpsScm {
