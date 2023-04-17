@@ -44,7 +44,7 @@ multibranchPipelineJob('github/blog-folder/build') {
         }
     }
     triggers {
-        cron('@daily')
+        pollSCM('10 5 * * *')
     }
 }
 
