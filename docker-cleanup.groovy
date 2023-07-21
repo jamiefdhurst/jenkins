@@ -3,7 +3,7 @@ node {
 
     stage('Get Free Space') {
         diskUsed = sh(
-            script: "df -h | grep /dev/nvme | sed 's/.*\\s\\([0-9]\\+\\)%.*/\\1/'",
+            script: "df -h | grep /dev/root | sed 's/.*\\s\\([0-9]\\+\\)%.*/\\1/'",
             returnStdout: true
         ).trim()
         print 'Disk space used on CI server: ' + diskUsed + '%...'
