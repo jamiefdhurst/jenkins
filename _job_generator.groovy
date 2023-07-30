@@ -55,6 +55,7 @@ pipelineJob('github/blog-folder/release') {
     description 'Release new version of Blog to GitHub'
     environmentVariables {
         env('repository', 'jamiefdhurst/blog')
+        env('versionFiles', 'blog/config.py')
         env('releaseBranch', 'main')
         env('automaticRelease', true)
         env('pushRelease', true)
