@@ -60,6 +60,7 @@ pipelineJob('github/blog-folder/release') {
         env('automaticRelease', true)
         env('pushRelease', true)
         env('dockerImage', 'blog')
+        env('dockerRebuild', true)
     }
     logRotator {
         numToKeep(10)
