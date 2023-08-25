@@ -116,7 +116,6 @@ make init &>> /root/log.txt
 make apply-force &>> /root/log.txt
 export DATE_FORMATTED=$(date +"%Y-%m-%d_%H%M%S")
 aws s3 cp /root/log.txt s3://jamiehurst-logs/terraform/\\$DATE_FORMATTED.txt
-shutdown -h now
 EOF
 chmod +x /root/run.sh
 echo 'Installed' > /root/.installed
