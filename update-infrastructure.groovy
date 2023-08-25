@@ -11,6 +11,11 @@ def readJson(jsonText) {
 }
 
 def getEnvironment() {
+    library identifier: 'jenkins@main'
+
+    copyParamsToEnv()
+    env.isUserTriggered = currentBuild.rawBuild.causes[0].toString().contains('UserIdCause')
+
     // Get base security group
     env.baseSG = sh(
         script: '''
@@ -28,21 +33,45 @@ def getEnvironment() {
 // groovylint-disable-next-line FactoryMethodName
 def buildAmi() {
     // Check if needed
-    def String existingAmi = sh(
+    def existingAmis = readJson(sh(
         script: '''
             aws ec2 describe-images \
                 --region eu-west-1 \
                 --filters "Name=tag:Purpose,Values=infra-update" \
                 --owners self \
-                --output text \
-                --query "Images[0].ImageId"
+                --output json \
+                --query "reverse(sort_by(Images,&CreationDate))[*].{ImageId:ImageId,Name:Name}"
         ''',
         returnStdout: true
-    ).trim()
-    if (existingAmi != null && existingAmi != '' && existingAmi != 'None') {
-        print "Found existing AMI '${existingAmi}', skipping build..."
-        env.amiId = existingAmi
-        return
+    ).trim())
+
+    if (env.isUserTriggered) {
+        // Present option for AMI build
+        def amiChoices = []
+        for (ami in existingAmis) {
+            amiChoices.add(ami.ImageId + ': ' + ami.Name)
+        }
+        amiChoices.add('Build New AMI')
+        amiChoice = input(
+            message: 'Choose the AMI to use for updating:',
+            parameters: [
+                choice(name: 'ami', choices: amiChoices)
+            ]
+        )
+        if (amiChoice != 'Build new AMI') {
+            amiChoice = amiChoice.tokenize(':')
+            env.amiId = amiChoice[0]
+            print "Chose existing AMI '${env.amiId}', skipping build..."
+            return
+        } else {
+            print 'Chose to build new AMI...'
+        }
+    } else {
+        if (existingAmis != null && existingAmis.size > 0) {
+            print "Found existing AMI '${existingAmis[0].ImageId}', skipping build..."
+            env.amiId = existingAmis[0].ImageId
+            return
+        }
     }
 
     // Get latest Ubuntu 18.04 image
@@ -81,10 +110,12 @@ export AWS_ACCESS_KEY_ID=\\$TEMP_AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=\\$TEMP_AWS_SECRET_ACCESS_KEY
 git clone https://jamiefdhurst:\\$GITHUB_TOKEN@github.com/jamiefdhurst/infrastructure.git
 cd infrastructure
-make build
-make decrypt
-make init
-make apply-force
+make build &> /root/log.txt
+make decrypt &>> /root/log.txt
+make init &>> /root/log.txt
+make apply-force &>> /root/log.txt
+export DATE_FORMATTED=$(date +"%Y-%m-%d_%H%M%S")
+aws s3 cp /root/log.txt s3://jamiehurst-logs/terraform/$DATE_FORMATTED.txt
 shutdown -h now
 EOF
 chmod +x /root/run.sh
