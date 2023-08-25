@@ -115,7 +115,7 @@ make decrypt &>> /root/log.txt
 make init &>> /root/log.txt
 make apply-force &>> /root/log.txt
 export DATE_FORMATTED=$(date +"%Y-%m-%d_%H%M%S")
-aws s3 cp /root/log.txt s3://jamiehurst-logs/terraform/$DATE_FORMATTED.txt
+aws s3 cp /root/log.txt s3://jamiehurst-logs/terraform/\\$DATE_FORMATTED.txt
 shutdown -h now
 EOF
 chmod +x /root/run.sh
@@ -240,7 +240,7 @@ echo 'Installation complete'
     }
 
     // Wait for AMI to become ready (not pending)
-    print "Waiting for image '${amiId}' to become avaiilable..."
+    print "Waiting for image '${amiId}' to become available..."
     sh("""
         aws ec2 wait image-available \
             --region eu-west-1 \
