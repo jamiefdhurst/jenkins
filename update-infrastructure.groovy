@@ -157,7 +157,7 @@ echo 'Installation complete'
                         ssh -i $SSH_PRIV_KEY \
                             -o StrictHostKeyChecking=no \
                             ubuntu@${instanceDetails.Instances[0].PrivateIpAddress} \
-                            'sudo cat /root/.installed'
+                            'sudo cat /root/.installed-dont-find-this-temporarily'
                     """,
                     returnStdout: true
                 ).trim()
