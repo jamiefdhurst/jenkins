@@ -1,11 +1,12 @@
-/* groovylint-disable CompileStatic */
+// groovylint-disable CompileStatic
+// groovylint-disable LineLength
 pipeline {
     agent any
 
     stages {
         stage('Lint') {
             steps {
-                sh "docker run --rm -v \$(pwd):/tmp -w=/tmp nvuillam/npm-groovy-lint --failon warning"
+                sh 'docker run --rm -u "$(id -u):$(id -g)" -v $(pwd):/tmp -w=/tmp nvuillam/npm-groovy-lint --failon warning'
             }
         }
 
@@ -16,6 +17,12 @@ pipeline {
             steps {
                 build job: '/github/jenkins-folder/release', wait: true
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
