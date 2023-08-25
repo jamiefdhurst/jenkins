@@ -58,7 +58,7 @@ def buildAmi() {
                 choice(name: 'ami', choices: amiChoices)
             ]
         )
-        if (amiChoice != 'Build new AMI') {
+        if (amiChoice != 'Build New AMI') {
             amiChoice = amiChoice.tokenize(':')
             env.amiId = amiChoice[0]
             print "Chose existing AMI '${env.amiId}', skipping build..."
