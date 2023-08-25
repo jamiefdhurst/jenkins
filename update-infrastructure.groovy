@@ -90,6 +90,7 @@ def buildAmi() {
 
     // Launch instance with user data to install information
     def String userData = '''#!/bin/bash
+set -e
 sleep 30
 apt-get update
 sleep 2
@@ -118,8 +119,9 @@ make build &> /root/log.txt
 make decrypt &>> /root/log.txt
 make init &>> /root/log.txt
 make apply-force &>> /root/log.txt
-export DATE_FORMATTED=$(date +"%Y-%m-%d_%H%M%S")
+export DATE_FORMATTED=\\$(date +"%Y-%m-%d_%H%M%S")
 aws s3 cp /root/log.txt s3://jamiehurst-logs/terraform/\\$DATE_FORMATTED.txt
+shutdown -h now
 EOF
 chmod +x /root/run.sh
 echo 'Installed' > /root/.installed
@@ -161,7 +163,7 @@ echo 'Installation complete'
                         ssh -i $SSH_PRIV_KEY \
                             -o StrictHostKeyChecking=no \
                             ubuntu@${instanceDetails.Instances[0].PrivateIpAddress} \
-                            'sudo cat /root/.installed-dont-find-this-temporarily'
+                            'sudo cat /root/.installed'
                     """,
                     returnStdout: true
                 ).trim()
