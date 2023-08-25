@@ -213,6 +213,81 @@ pipelineJob('github/goldeneye-folder/release') {
 //     }
 // }
 
+folder('github/jenkins-folder') {
+    displayName('Jenkins Libs')
+}
+
+multibranchPipelineJob('github/jenkins-folder/build') {
+    displayName 'Jenkins Libs - Build'
+    description 'Jenkins libraries for deploy, release, etc.'
+    branchSources {
+        branchSource {
+            buildStrategies {
+                ignoreCommitterStrategy {
+                    ignoredAuthors('jamie,jenkins-ci,jenkins-ci@jamiehurst.co.uk')
+                    allowBuildIfNotExcludedAuthor(true)
+                }
+            }
+            source {
+                github {
+                    id('40f73a63-7f0d-4c71-8ac2-0f0b2f65e446')
+                    credentialsId('github-personal-access-token')
+                    configuredByUrl(false)
+                    repositoryUrl('https://github.com/jamiefdhurst/jenkins.git')
+                    repoOwner('jamiefdhurst')
+                    repository('jenkins')
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    orphanedItemStrategy {
+        discardOldItems {
+            daysToKeep(7)
+        }
+    }
+    triggers {
+        periodicFolderTrigger {
+            interval('5m')
+        }
+    }
+}
+
+pipelineJob('github/jenkins-folder/release') {
+    displayName 'Jenkins Libs - Release'
+    description 'Release new version of Jenkins Libs to GitHub'
+    environmentVariables {
+        env('repository', 'jamiefdhurst/jenkins')
+        env('releaseBranch', 'main')
+        env('automaticRelease', true)
+        env('pushRelease', true)
+    }
+    logRotator {
+        numToKeep(10)
+    }
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url('https://github.com/jamiefdhurst/jenkins')
+                        credentials('github-personal-access-token')
+                    }
+                    branch('main')
+                }
+            }
+            scriptPath('release-version.groovy')
+        }
+    }
+}
+
 folder('github/journal-folder') {
     displayName('Journal')
 }
