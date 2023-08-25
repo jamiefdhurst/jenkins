@@ -1,4 +1,6 @@
-/* groovylint-disable NestedBlockDepth */
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 folder('github') {
     displayName('GitHub')
 }

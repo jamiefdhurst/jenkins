@@ -1,4 +1,6 @@
-/* groovylint-disable LineLength */
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 import groovy.json.JsonSlurperClassic
 
 def call(Map vars=[:]) {
@@ -25,6 +27,7 @@ def call(Map vars=[:]) {
     countPatchKeywords = 0
     countSkips = 0
     commits = details.clone()
+    // groovylint-disable-next-line Instanceof
     if (!(details instanceof List)) {
         commits = details.commits.clone()
     }

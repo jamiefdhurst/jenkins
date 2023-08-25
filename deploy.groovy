@@ -1,4 +1,6 @@
-/* groovylint-disable LineLength */
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 
 node {
     /* Presumes the following variables are set:

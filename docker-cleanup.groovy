@@ -1,3 +1,4 @@
+// groovylint-disable CompileStatic
 node {
     diskUsed = 0
 

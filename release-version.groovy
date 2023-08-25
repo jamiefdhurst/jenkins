@@ -1,7 +1,10 @@
-/* groovylint-disable LineLength */
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 import groovy.json.JsonOutput
 
-/* groovylint-disable-next-line CompileStatic */
+gitHubUserPass = [usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]
+
 pipeline {
     agent any
 
@@ -68,7 +71,7 @@ pipeline {
                             writeFile(file: versionFile, text: file)
                         }
 
-                        withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                        withCredentials(gitHubUserPass) {
                             sh 'git add .'
                             sh 'git config --global user.name "Jenkins CI"'
                             sh 'git config --global user.email "jenkins-ci@jamiehurst.co.uk"'
@@ -120,7 +123,7 @@ pipeline {
                 script {
                     if (env.dockerImage) {
                         print 'Pushing Docker image...'
-                        withCredentials([usernamePassword(credentialsId: 'github-personal-access-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                        withCredentials(gitHubUserPass) {
                             sh "docker login -u $GITHUB_USERNAME -p $GITHUB_PASSWORD ghcr.io"
                             sh """
                             docker tag ${env.dockerImage} ghcr.io/jamiefdhurst/${env.dockerImage}:latest

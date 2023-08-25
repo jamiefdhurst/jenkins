@@ -1,3 +1,6 @@
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 def call(Map vars=[:]) {
     version = vars.get('version', [full: '', numbers: '', major: 0, minor: 0, patch: 0, revision: 0])
     release = vars.get('release', '').toLowerCase()
@@ -25,7 +28,7 @@ def call(Map vars=[:]) {
         case 'revision':
             version.revision += 1
     }
-    newVersion = 'v' + version.major.toString()
+    newVersion = 'v' + version.major
     if (version.minor > 0 || version.patch > 0 || version.revision > 0) {
         newVersion = newVersion + '.' + version.minor.toString()
         if (version.patch > 0 || version.revision > 0) {

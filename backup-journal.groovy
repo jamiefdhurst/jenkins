@@ -1,3 +1,5 @@
+// groovylint-disable LineLength
+// groovylint-disable CompileStatic
 node {
     stage('Backup') {
         withCredentials([sshUserPrivateKey(credentialsId: 'hiawatha-ssh-key', usernameVariable: 'SSH_USER', keyFileVariable: 'SSH_PRIV_KEY')]) {

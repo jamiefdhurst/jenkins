@@ -1,4 +1,6 @@
-/* groovylint-disable LineLength */
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 def call(Map vars=[:]) {
     repo = vars.get('repo')
 
@@ -22,17 +24,17 @@ def call(Map vars=[:]) {
     major = versionParts[0].toInteger()
     try {
         minor = versionParts[1].toInteger()
-    } catch (Exception e) {
+    } catch (e) {
         minor = 0
     }
     try {
         patch = versionParts[2].toInteger()
-    } catch (Exception e) {
+    } catch (e) {
         patch = 0
     }
     try {
         revision = versionParts[3].toInteger()
-    } catch (Exception e) {
+    } catch (e) {
         revision = 0
     }
 

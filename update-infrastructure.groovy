@@ -1,5 +1,9 @@
-/* groovylint-disable LineLength */
+// groovylint-disable LineLength
+// groovylint-disable NestedBlockDepth
+// groovylint-disable CompileStatic
 import groovy.json.JsonSlurperClassic
+
+sshCredentialsMap = [sshUserPrivateKey(credentialsId: 'hiawatha-ssh-key', usernameVariable: 'SSH_USER', keyFileVariable: 'SSH_PRIV_KEY')]
 
 @NonCPS
 def readJson(jsonText) {
@@ -21,6 +25,7 @@ def getEnvironment() {
     env.datetime = sh(script: "date '+%Y%m%d%H%M%S'", returnStdout: true).trim()
 }
 
+// groovylint-disable-next-line FactoryMethodName
 def buildAmi() {
     // Check if needed
     def String existingAmi = sh(
@@ -115,7 +120,7 @@ echo 'Installation complete'
     def tries = 0
     def found = false
     while (!found && tries < maxTries) {
-        withCredentials([sshUserPrivateKey(credentialsId: 'hiawatha-ssh-key', usernameVariable: 'SSH_USER', keyFileVariable: 'SSH_PRIV_KEY')]) {
+        withCredentials(sshCredentialsMap) {
             try {
                 def installed = sh(
                     script: """
@@ -129,6 +134,7 @@ echo 'Installation complete'
                 if (installed == 'Installed') {
                     found = true
                 }
+            // groovylint-disable-next-line EmptyCatchBlock
             } catch (err) {}
         }
         tries++
@@ -141,7 +147,7 @@ echo 'Installation complete'
     }
 
     if (!found) {
-        withCredentials([sshUserPrivateKey(credentialsId: 'hiawatha-ssh-key', usernameVariable: 'SSH_USER', keyFileVariable: 'SSH_PRIV_KEY')]) {
+        withCredentials(sshCredentialsMap) {
             try {
                 def logs = sh(
                     script: """
@@ -153,6 +159,7 @@ echo 'Installation complete'
                     returnStdout: true
                 ).trim()
                 print logs
+            // groovylint-disable-next-line EmptyCatchBlock
             } catch (err) {}
         }
     }

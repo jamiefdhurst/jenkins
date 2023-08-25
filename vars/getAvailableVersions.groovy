@@ -1,4 +1,5 @@
-/* groovylint-disable LineLength */
+// groovylint-disable LineLength
+// groovylint-disable CompileStatic
 import groovy.json.JsonSlurperClassic
 
 def call(Map vars=[:]) {
