@@ -90,9 +90,13 @@ def buildAmi() {
 
     // Launch instance with user data to install information
     def String userData = '''#!/bin/bash
+sleep 30
 apt-get update
+sleep 2
 apt-get -yq upgrade
+sleep 2
 apt-get -yq install ca-certificates curl gnupg lsb-release git awscli make
+sleep 2
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
