@@ -104,8 +104,9 @@ retry() {
     set -e
   fi
   if [[ \\$exit_code -ne 0 && \\$retries -gt 0 ]]; then
+    echo "Failed to run '\\$command' - retries remaining: \\$retries"
     sleep 2s
-    retry \\$(($retries - 1)) "\\$command"
+    retry \\$((\\$retries - 1)) "\\$command"
   else
     return \\$exit_code
   fi
