@@ -289,7 +289,7 @@ EOF''',
         returnStdout: true
     ).trim())
     print env.spotRequest
-    print 'Spot instance requested'
+    print "Spot instance requested - ${env.spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId}"
 
     // Wait for spot instance to be fulfilled
     print 'Waiting for spot instance request to be fulfilled...'
