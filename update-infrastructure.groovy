@@ -279,7 +279,7 @@ def requestSpotInstance() {
 EOF''',
         returnStdout: true
     ).trim()
-    env.spotRequest = readJson(sh(
+    def spotRequest = readJson(sh(
         script: """
             aws ec2 request-spot-instances \
                 --region eu-west-1 \
@@ -288,15 +288,15 @@ EOF''',
         """,
         returnStdout: true
     ).trim())
-    print env.spotRequest
-    print "Spot instance requested - ${env.spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId}"
+    print spotRequest
+    print "Spot instance requested - ${spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId}"
 
     // Wait for spot instance to be fulfilled
     print 'Waiting for spot instance request to be fulfilled...'
     sh("""
         aws ec2 wait spot-instance-request-fulfilled \
             --region eu-west-1 \
-            --spot-instance-request-ids ${env.spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId}
+            --spot-instance-request-ids ${spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId}
     """)
 
     // Get instance ID
@@ -304,7 +304,7 @@ EOF''',
         script: """
             aws ec2 describe-spot-instance-requests \
                 --region eu-west-1 \
-                --spot-instance-request-ids ${env.spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId} \
+                --spot-instance-request-ids ${spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId} \
                 --output text \
                 --query "SpotInstanceRequests[*].InstanceId"
         """,
