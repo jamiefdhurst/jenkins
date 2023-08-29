@@ -74,19 +74,19 @@ def buildAmi() {
         }
     }
 
-    // Get latest Ubuntu 18.04 image
+    // Get latest Ubuntu 22.04 image
     def String ubuntuAmi = sh(
         script: '''
             aws ec2 describe-images \
                 --region eu-west-1 \
-                --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*" \
+                --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*" \
                 --owners 099720109477 \
                 --output text \
                 --query "Images[*].[ImageId,CreationDate,Name] | sort_by(@, &[1]) | reverse(@) [0][0]"
         ''',
         returnStdout: true
     ).trim()
-    print "Found Ubuntu 18.04 AMI: ${ubuntuAmi}"
+    print "Found Ubuntu 22.04 AMI: ${ubuntuAmi}"
 
     // Launch instance with user data to install information
     def String userData = '''#!/bin/bash
