@@ -179,7 +179,7 @@ echo 'Installation complete'
                         ssh -i $SSH_PRIV_KEY \
                             -o StrictHostKeyChecking=no \
                             ubuntu@${instanceDetails.Instances[0].PrivateIpAddress} \
-                            'sudo cat /root/.installed-do-not-find'
+                            'sudo cat /root/.installed'
                     """,
                     returnStdout: true
                 ).trim()
