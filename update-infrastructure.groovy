@@ -91,17 +91,32 @@ def buildAmi() {
     // Launch instance with user data to install information
     def String userData = '''#!/bin/bash
 set -e
-sleep 30
-apt-get update
-sleep 2
-apt-get -yq upgrade
-sleep 2
-apt-get -yq install ca-certificates curl gnupg lsb-release git awscli make
-sleep 2
+retry() {
+  local retries="\\$1"
+  local command="\\$2"
+  local options="\\$-"
+  if [[ \$options == *e* ]]; then
+    set +e
+  fi
+  \\$command
+  local exit_code=\\$?
+  if [[ \\$options == *e* ]]; then
+    set -e
+  fi
+  if [[ \\$exit_code -ne 0 && \\$retries -gt 0 ]]; then
+    sleep 2s
+    retry \\$(($retries - 1)) "\\$command"
+  else
+    return \\$exit_code
+  fi
+}
+retry 5 "apt-get update"
+retry 5 "apt-get -yq upgrade"
+retry 5 "apt-get -yq install ca-certificates curl gnupg lsb-release git awscli make"
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-apt-get update
-apt-get -yq install docker-ce docker-ce-cli containerd.io
+retry 5 "apt-get update"
+retry 5 "apt-get -yq install docker-ce docker-ce-cli containerd.io"
 cat << EOF > /root/run.sh
 #!/bin/bash
 cd /root
@@ -163,7 +178,7 @@ echo 'Installation complete'
                         ssh -i $SSH_PRIV_KEY \
                             -o StrictHostKeyChecking=no \
                             ubuntu@${instanceDetails.Instances[0].PrivateIpAddress} \
-                            'sudo cat /root/.installed'
+                            'sudo cat /root/.installed-do-not-find'
                     """,
                     returnStdout: true
                 ).trim()
