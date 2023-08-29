@@ -270,7 +270,7 @@ echo 'Installation complete'
 }
 
 def requestSpotInstance() {
-    print "Requesting spot instance..."
+    print 'Requesting spot instance...'
     def userData = sh(
         script: '''
         cat <<EOF | base64 -w 0
@@ -289,7 +289,87 @@ EOF''',
         returnStdout: true
     ).trim())
     print env.spotRequest
-    print 'Instance scheduled'
+    print 'Spot instance requested'
+
+    // Wait for spot instance to be fulfilled
+    print 'Waiting for spot instance request to be fulfilled...'
+    sh("""
+        aws ec2 wait spot-instance-request-fulfilled \
+            --region eu-west-1 \
+            --spot-instance-request-ids ${env.spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId}
+    """)
+
+    // Get instance ID
+    def instanceId = sh(
+        script: """
+            aws ec2 describe-spot-instance-requests \
+                --region eu-west-1 \
+                --spot-instance-request-ids ${env.spotRequest.SpotInstanceRequests[0].SpotInstanceRequestId} \
+                --output text \
+                --query "SpotInstanceRequests[*].InstanceId"
+        """,
+        returnStdout: true
+    ).trim()
+
+    // Continue looping until instance is available and then check run.sh is running
+    print "Waiting for instance '${instanceId}' to become available..."
+    sh("""
+        aws ec2 wait instance-status-ok \
+            --region eu-west-1 \
+            --instance-ids ${instanceId}
+    """)
+
+    // Get instance IP
+    def instanceIp = sh(
+        script: """
+            aws ec2 describe-images \
+                --region eu-west-1 \
+                --instance-ids ${instanceId}
+                --output text
+                --query "Reservations[*].Instances[*].PrivateIpAddress"
+        """,
+        returnStdout: true
+    ).trim()
+
+    // Connect and check /root/.installed
+    def maxTries = 30
+    def tries = 0
+    def found = false
+    while (!found && tries < maxTries) {
+        withCredentials(sshCredentialsMap) {
+            try {
+                def running = sh(
+                    script: """
+                        ssh -i $SSH_PRIV_KEY \
+                            -o StrictHostKeyChecking=no \
+                            ubuntu@${instanceIp} \
+                            'ps aux | grep run.sh | grep -v grep | wc -l'
+                    """,
+                    returnStdout: true
+                ).trim()
+                if (running == '1') {
+                    found = true
+                }
+            // groovylint-disable-next-line EmptyCatchBlock
+            } catch (err) {}
+        }
+        tries++
+        if (!found) {
+            echo "Failed to verify instance - try #${tries}/${maxTries}..."
+            sleep 5
+        } else {
+            echo 'Verified instance has started running'
+        }
+    }
+
+    if (!found) {
+        sh("""
+            aws ec2 terminate-instances \
+                --region eu-west-1 \
+                --instance-ids ${instanceId}
+        """)
+        error("Could not verify instance ${instanceId} had launched correctly...")
+    }
 }
 
 pipeline {
