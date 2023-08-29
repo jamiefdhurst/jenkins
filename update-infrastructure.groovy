@@ -92,23 +92,23 @@ def buildAmi() {
     def String userData = '''#!/bin/bash
 set -e
 retry() {
-  local retries="\\$1"
-  local command="\\$2"
-  local options="\\$-"
-  if [[ \$options == *e* ]]; then
+  local retries="$1"
+  local command="$2"
+  local options="$-"
+  if [[ $options == *e* ]]; then
     set +e
   fi
-  \\$command
-  local exit_code=\\$?
-  if [[ \\$options == *e* ]]; then
+  $command
+  local exit_code=$?
+  if [[ $options == *e* ]]; then
     set -e
   fi
-  if [[ \\$exit_code -ne 0 && \\$retries -gt 0 ]]; then
-    echo "Failed to run '\\$command' - retries remaining: \\$retries"
+  if [[ $exit_code -ne 0 && $retries -gt 0 ]]; then
+    echo "Failed to run '$command' - retries remaining: $retries"
     sleep 2s
-    retry \\$((\\$retries - 1)) "\\$command"
+    retry $(($retries - 1)) "$command"
   else
-    return \\$exit_code
+    return $exit_code
   fi
 }
 retry 5 "apt-get update"
