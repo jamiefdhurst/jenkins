@@ -322,7 +322,7 @@ EOF''',
     // Get instance IP
     def instanceIp = sh(
         script: """
-            aws ec2 describe-images \
+            aws ec2 describe-instances \
                 --region eu-west-1 \
                 --instance-ids ${instanceId} \
                 --output text \
