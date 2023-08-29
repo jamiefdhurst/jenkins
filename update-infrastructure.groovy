@@ -324,8 +324,8 @@ EOF''',
         script: """
             aws ec2 describe-images \
                 --region eu-west-1 \
-                --instance-ids ${instanceId}
-                --output text
+                --instance-ids ${instanceId} \
+                --output text \
                 --query "Reservations[*].Instances[*].PrivateIpAddress"
         """,
         returnStdout: true
