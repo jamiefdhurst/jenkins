@@ -37,6 +37,7 @@ node {
                 docker login -u $GITHUB_USERNAME -p $GITHUB_PASSWORD ghcr.io;\
                 docker pull ghcr.io/jamiefdhurst/${env.targetImage}:${env.targetVersion};\
                 docker tag ghcr.io/jamiefdhurst/${env.targetImage}:${env.targetVersion} ${env.targetImage}:${env.targetVersion};\
+                [ -f /etc/versions/${env.targetImage} ] && sudo sh -c \"echo \'${env.targetVersion}\' > /etc/versions/${env.targetImage}\";\
                 sudo sed -i \'s/${env.targetImage}:.*\$/${env.targetImage}:${env.targetVersion}/\' /etc/supervisor/conf.d/${env.targetImage}.conf;\
                 sudo supervisorctl reread;\
                 sudo supervisorctl update'"
