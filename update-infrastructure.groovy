@@ -14,7 +14,7 @@ def getEnvironment() {
     library identifier: 'jenkins@main'
 
     copyParamsToEnv()
-    env.isUserTriggered = currentBuild.rawBuild.causes[0].toString().contains('UserIdCause')
+    env.isUserTriggered = !currentBuild.getBuildCauses()[0]['shortDescription'].contains('timer')
 
     // Get base security group
     env.baseSG = sh(
