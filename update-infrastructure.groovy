@@ -14,7 +14,13 @@ def getEnvironment() {
     library identifier: 'jenkins@main'
 
     copyParamsToEnv()
+    print "Short description for build cause: " + currentBuild.getBuildCauses()[0]['shortDescription']
     env.isUserTriggered = !currentBuild.getBuildCauses()[0]['shortDescription'].contains('timer')
+    if (env.isUserTriggered) {
+        print "User has triggered his build"
+    } else {
+        print "This build was triggered automatically"
+    }
 
     // Get base security group
     env.baseSG = sh(
