@@ -41,7 +41,7 @@ node {
                 sudo sed -i \'s/${env.targetImage}:.*\$/${env.targetImage}:${env.targetVersion}/\' /etc/supervisor/conf.d/${env.targetImage}.conf;\
                 sudo supervisorctl reread;\
                 sudo supervisorctl update;\
-                sudo supervisorctl restart'"
+                sudo supervisorctl restart ${env.targetImage}'"
         }
     }
 }
