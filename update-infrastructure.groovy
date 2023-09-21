@@ -14,9 +14,17 @@ def getEnvironment() {
     library identifier: 'jenkins@main'
 
     copyParamsToEnv()
-    print "Short description for build cause: " + currentBuild.getBuildCauses()[0]['shortDescription']
-    env.isUserTriggered = false
-    env.isUserTriggered = currentBuild.getBuildCauses()[0]['shortDescription'].toString() != 'Started by timer'
+
+    env.isUserTriggered = true
+    def buildCauses = currentBuild.rawBuild.getCauses()
+
+    for (buildCause in buildCauses) {
+        print "Checking build cause: ${buildCause}"
+        if ("${buildCause}".contains("hudson.triggers.TimerTrigger\$TimerTriggerCause")) {
+            env.isUserTriggered = false
+        }
+    }
+
     if (env.isUserTriggered) {
         print "User has triggered this build"
     } else {
