@@ -15,18 +15,17 @@ def getEnvironment() {
 
     copyParamsToEnv()
 
-    env.isUserTriggered = true
     def buildCauses = currentBuild.rawBuild.getCauses()
 
     for (buildCause in buildCauses) {
         print "Checking build cause: ${buildCause}"
         if ("${buildCause}".contains('TimerTriggerCause')) {
             print "We're in the right place, why is this not setting?"
-            env.isUserTriggered = false
+            env.isTimerTriggered = true
         }
     }
 
-    if (env.isUserTriggered) {
+    if (env.isTimerTriggered) {
         print "User has triggered this build"
     } else {
         print "This build was triggered automatically"
@@ -61,7 +60,7 @@ def buildAmi() {
         returnStdout: true
     ).trim())
 
-    if (env.isUserTriggered) {
+    if (!env.isTimerTriggered) {
         // Present option for AMI build
         def amiChoices = []
         for (ami in existingAmis) {
