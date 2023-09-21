@@ -15,9 +15,10 @@ def getEnvironment() {
 
     copyParamsToEnv()
     print "Short description for build cause: " + currentBuild.getBuildCauses()[0]['shortDescription']
-    env.isUserTriggered = currentBuild.getBuildCauses()[0]['shortDescription'] != 'Started by timer'
+    env.isUserTriggered = false
+    env.isUserTriggered = currentBuild.getBuildCauses()[0]['shortDescription'].toString() != 'Started by timer'
     if (env.isUserTriggered) {
-        print "User has triggered his build"
+        print "User has triggered this build"
     } else {
         print "This build was triggered automatically"
     }
