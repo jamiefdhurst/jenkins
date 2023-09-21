@@ -20,7 +20,7 @@ def getEnvironment() {
 
     for (buildCause in buildCauses) {
         print "Checking build cause: ${buildCause}"
-        if ("${buildCause}".contains("hudson.triggers.TimerTrigger\$TimerTriggerCause")) {
+        if ("${buildCause}".contains('TimerTriggerCause')) {
             env.isUserTriggered = false
         }
     }
