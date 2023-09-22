@@ -15,14 +15,14 @@ def getEnvironment() {
 
     copyParamsToEnv()
 
-    def buildCauses = currentBuild.rawBuild.getCauses()
+    // def buildCauses = currentBuild.rawBuild.getCauses()
 
-    for (buildCause in buildCauses) {
-        print "Checking build cause: ${buildCause}"
-        if ("${buildCause}".contains('TimerTriggerCause')) {
-            env.isTimerTriggered = true
-        }
-    }
+    // for (buildCause in buildCauses) {
+    //     print "Checking build cause: ${buildCause}"
+    //     if ("${buildCause}".contains('TimerTriggerCause')) {
+    //         env.isTimerTriggered = true
+    //     }
+    // }
 
     // Get base security group
     env.baseSG = sh(
@@ -53,34 +53,34 @@ def buildAmi() {
         returnStdout: true
     ).trim())
 
-    if (!env.isTimerTriggered) {
-        // Present option for AMI build
-        def amiChoices = []
-        for (ami in existingAmis) {
-            amiChoices.add(ami.ImageId + ': ' + ami.Name)
-        }
-        amiChoices.add('Build New AMI')
-        amiChoice = input(
-            message: 'Choose the AMI to use for updating:',
-            parameters: [
-                choice(name: 'ami', choices: amiChoices)
-            ]
-        )
-        if (amiChoice != 'Build New AMI') {
-            amiChoice = amiChoice.tokenize(':')
-            env.amiId = amiChoice[0]
-            print "Chose existing AMI '${env.amiId}', skipping build..."
-            return
-        } else {
-            print 'Chose to build new AMI...'
-        }
-    } else {
+    // if (!env.isTimerTriggered) {
+    //     // Present option for AMI build
+    //     def amiChoices = []
+    //     for (ami in existingAmis) {
+    //         amiChoices.add(ami.ImageId + ': ' + ami.Name)
+    //     }
+    //     amiChoices.add('Build New AMI')
+    //     amiChoice = input(
+    //         message: 'Choose the AMI to use for updating:',
+    //         parameters: [
+    //             choice(name: 'ami', choices: amiChoices)
+    //         ]
+    //     )
+    //     if (amiChoice != 'Build New AMI') {
+    //         amiChoice = amiChoice.tokenize(':')
+    //         env.amiId = amiChoice[0]
+    //         print "Chose existing AMI '${env.amiId}', skipping build..."
+    //         return
+    //     } else {
+    //         print 'Chose to build new AMI...'
+    //     }
+    // } else {
         if (existingAmis != null && existingAmis.size > 0) {
             print "Found existing AMI '${existingAmis[0].ImageId}', skipping build..."
             env.amiId = existingAmis[0].ImageId
             return
         }
-    }
+    // }
 
     // Get latest Ubuntu 22.04 image
     def String ubuntuAmi = sh(
