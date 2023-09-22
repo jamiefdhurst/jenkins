@@ -75,7 +75,7 @@ def buildAmi() {
     //         print 'Chose to build new AMI...'
     //     }
     // } else {
-        if (existingAmis != null && existingAmis.size > 0) {
+        if (existingAmis != null && existingAmis.size() > 0) {
             print "Found existing AMI '${existingAmis[0].ImageId}', skipping build..."
             env.amiId = existingAmis[0].ImageId
             return
