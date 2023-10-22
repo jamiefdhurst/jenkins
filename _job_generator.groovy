@@ -531,7 +531,7 @@ pipelineJob('utilities/update-infrastructure') {
         numToKeep(10)
     }
     triggers {
-        cron('10 5 * * *')
+        cron('8 5 * * 6')
     }
     definition {
         cpsScm {
