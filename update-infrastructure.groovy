@@ -327,7 +327,7 @@ EOF''',
             --instance-ids ${instanceId}
     """)
 
-    /*// Get instance IP
+    // Get instance IP
     def instanceIp = sh(
         script: """
             aws ec2 describe-instances \
@@ -339,7 +339,7 @@ EOF''',
         returnStdout: true
     ).trim()
 
-    // Connect and check /root/.installed
+    // Connect and check if run.sh is in ps aux
     def maxTries = 30
     def tries = 0
     def found = false
@@ -350,6 +350,8 @@ EOF''',
                     script: """
                         ssh -i $SSH_PRIV_KEY \
                             -o StrictHostKeyChecking=no \
+                            -o BatchMode=yes \
+                            -o ConnectTimeout=30 \
                             ubuntu@${instanceIp} \
                             'ps aux | grep run.sh | grep -v grep | wc -l'
                     """,
@@ -362,11 +364,11 @@ EOF''',
             } catch (err) {}
         }
         tries++
-        if (!found) {
+        if (found) {
+            echo 'Verified instance has started running'
+        } else {
             echo "Failed to verify instance - try #${tries}/${maxTries}..."
             sleep 5
-        } else {
-            echo 'Verified instance has started running'
         }
     }
 
@@ -377,7 +379,7 @@ EOF''',
                 --instance-ids ${instanceId}
         """)
         error("Could not verify instance ${instanceId} had launched correctly...")
-    }*/
+    }
 }
 
 pipeline {
