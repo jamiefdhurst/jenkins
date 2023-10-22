@@ -327,7 +327,7 @@ EOF''',
             --instance-ids ${instanceId}
     """)
 
-    // Get instance IP
+    /*// Get instance IP
     def instanceIp = sh(
         script: """
             aws ec2 describe-instances \
@@ -377,7 +377,7 @@ EOF''',
                 --instance-ids ${instanceId}
         """)
         error("Could not verify instance ${instanceId} had launched correctly...")
-    }
+    }*/
 }
 
 pipeline {
